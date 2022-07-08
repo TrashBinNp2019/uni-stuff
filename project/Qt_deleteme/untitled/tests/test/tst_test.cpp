@@ -35,7 +35,7 @@ void Test::id_generation_test()
     QCOMPARE(id1.length(), 4);
     QVERIFY(id1 != id2);
     QVERIFY(id1 != id3);
-    QVERIFY(id3 != id3);
+    QVERIFY(id2 != id3);
 }
 
 void Test::sensor_fio_test()
@@ -53,15 +53,18 @@ void Test::sensor_fio_test()
 
     Sensor writtenXml("ffff", Sensor::Pressure);
     writtenXml.changeMode(State::Normal);
-    QDomElement fileXml{};
+    QDomDocument doc{};
+    QDomElement fileXml = doc.createElement("sensor");
     writtenXml.toXML(fileXml);
-    Sensor readXml("aaaa", Sensor::MagneticField);
-    readJson.fromXML(fileXml);
+    doc.appendChild(fileXml);
 
-    QCOMPARE(writtenXml.getMode(), readXml.getMode());
-    QCOMPARE(writtenXml.getValue(), readXml.getValue());
+    Sensor readXml("aaaa", Sensor::MagneticField);
+    readXml.fromXML(doc.elementsByTagName("sensor").at(0).toElement());
+
     QCOMPARE(writtenXml.getID(), readXml.getID());
+    QCOMPARE(writtenXml.getValue(), readXml.getValue());
     QCOMPARE(writtenXml.getType(), readXml.getType());
+    QCOMPARE(writtenXml.getMode(), readXml.getMode());
 }
 
 

@@ -109,7 +109,7 @@ void Sensor::fromXML(const QDomElement &el)
 {
     ID = el.attribute("ID", ID);
     type = static_cast<SensorType>(el.attribute("type", 0).toInt());
-    changeMode(static_cast<State::StateEnum>(el.attribute("type", 0).toInt()));
+    changeMode(static_cast<State::StateEnum>(el.attribute("state", 0).toInt()));
     state->setValue(el.attribute("val", 0).toDouble());
 }
 
